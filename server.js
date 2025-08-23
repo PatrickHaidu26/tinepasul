@@ -56,11 +56,11 @@ app.post('/api/send-code', async (req, res) => {
     await transporter.sendMail({
       from: process.env.MAIL_FROM,
       to: email,
-      subject: 'Your verification code',
-      text: `Your code is ${code}. It expires in 10 minutes.`
+      subject: 'Codul tău de verificare',
+      text: `Codul tău este ${code}. Acesta expiră în 10 minute.`
     });
     console.log(`[send-code] sent to ${email}`);
-    res.json({ ok: true, message: 'We sent you a 6-digit code.' });
+    res.json({ ok: true, message: 'Am trimis un cod de 6 cifre.' });
   } catch (e) {
     console.error('[send-code] error', e);
     // Differentiate validation vs SMTP issues
@@ -76,7 +76,7 @@ app.post('/api/verify-and-send', async (req, res) => {
     const entry = codes.get(key);
 
     if (!entry || entry.code !== code || Date.now() > entry.expiresAt) {
-      return res.status(400).json({ ok: false, message: 'Invalid or expired code.' });
+      return res.status(400).json({ ok: false, message: 'Codul este invalid sau expirat.' });
     }
     codes.delete(key);
 
@@ -85,9 +85,9 @@ app.post('/api/verify-and-send', async (req, res) => {
       .select('pdfBuffer pdfFilename pdfMime email')
       .lean();
 
-    if (!user) return res.status(404).json({ ok: false, message: 'No user for this email.' });
+    if (!user) return res.status(404).json({ ok: false, message: 'Adresa de email nu corespunde niciunui utilizator.' });
     if (!user.pdfBuffer?.buffer && !Buffer.isBuffer(user.pdfBuffer)) {
-      return res.status(404).json({ ok: false, message: 'No PDF stored for this user.' });
+      return res.status(404).json({ ok: false, message: 'Nu există diplomă pentru acest utilizator.' });
     }
 
     const pdfBuf = Buffer.isBuffer(user.pdfBuffer)
@@ -97,8 +97,8 @@ app.post('/api/verify-and-send', async (req, res) => {
     await transporter.sendMail({
       from: process.env.MAIL_FROM,
       to: email,
-      subject: 'Your requested PDF',
-      text: 'Thanks! Here is your PDF.',
+      subject: 'Diploma ta în format PDF',
+      text: 'Mulțumim! Aici este diploma ta în format PDF.',
       attachments: [{
         filename: user.pdfFilename || 'document.pdf',
         content: pdfBuf,
@@ -106,10 +106,10 @@ app.post('/api/verify-and-send', async (req, res) => {
       }]
     });
 
-    res.json({ ok: true, message: 'PDF sent! Check your inbox.' });
+    res.json({ ok: true, message: 'Am trimis diploma ta în format PDF.' });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ ok: false, message: 'Could not send email.' });
+    res.status(500).json({ ok: false, message: 'Nu am putut trimite diploma.' });
   }
 });
 
