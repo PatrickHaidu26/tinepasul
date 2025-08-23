@@ -21,7 +21,7 @@ const limiter = rateLimit({ windowMs: 60_000, max: 20, skip: (req) => req.method
 app.use('/api/', limiter);
 
 // --- connect Mongo ---
-await mongoose.connect(process.env.MONGO_URI);
+await mongoose.connect(process.env.MONGO_URI, { dbName: process.env.MONGO_DB });
 console.log('MongoDB connected');
 
 // --- mail transport (SMTP). Swap to SendGrid/Postmark if you prefer. ---
