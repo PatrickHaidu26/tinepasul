@@ -5,7 +5,8 @@
     "main": "server.js",
     "scripts": {
         "dev": "node server.js",
-        "seed": "node seed.js"
+        "seed": "node seed.js",
+        "build": "npm ci --omit=dev"
     },
     "dependencies": {
         "cors": "^2.8.5",

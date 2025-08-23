@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 // --- CORS using library (reflect any origin, including file:// which is 'null') ---
 app.use(cors({
-  origin: '*',
+  origin: 'https://tinepasul.info',
 }));
 // Ensure preflight requests are handled for any route
 app.use(express.static('public'));
