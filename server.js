@@ -9,6 +9,7 @@ import User from './models/User.js';
 
 const app = express();
 app.use(express.json());
+app.set('trust proxy', true);
 // --- CORS using library (reflect any origin, including file:// which is 'null') ---
 app.use(cors({
   origin: 'https://tinepasul.info',
